@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">CalcList</string>
+
+    <string name="number_zero">0</string>
+    <string name="number_one">1</string>
+    <string name="number_two">2</string>
+    <string name="number_three">3</string>
+    <string name="number_four">4</string>
+    <string name="number_five">5</string>
+    <string name="number_six">6</string>
+    <string name="number_seven">7</string>
+    <string name="number_eight">8</string>
+    <string name="number_nine">9</string>
+    <string name="btn_clear">Clear</string>
+    <string name="btn_backspace">Back</string>
+    <string name="keyboard_clear">Clear</string>
+    <string name="app_name_for">Test</string>
+    <string name="number_add">+</string>
+    <string name="number_back">Back</string>
+    <string name="number_empty"></string>
+
+
+
+
+
+</resources>
