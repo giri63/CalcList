@@ -62,10 +62,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textSize="30dp"
+                android:maxLength="6"
                 android:enabled="false"
                 android:textStyle="bold"
                 android:inputType="number"
-                android:text="" />
+                android:text="0" />
         </LinearLayout>
 
         <LinearLayout

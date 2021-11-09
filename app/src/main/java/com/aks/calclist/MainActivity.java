@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, ListItemAdapter.AdpaterCallback {
@@ -27,7 +28,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     RecyclerView listItemRecyclerView = null;
     Integer amountTotal = 0;
     TextView tvTotal;
+    TextView tvAdd;
     Button btClearList;
+
+    EditText mCurrentEditItem = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initViews() {
         mAmountField = findViewById(R.id.idEnterAmount);
         tvTotal = findViewById(R.id.idListTotal);
+        tvAdd = findViewById(R.id.idKeypadKeyAdd);
+
 
         btClearList = findViewById(R.id.idButtonClearList);
         btClearList.setOnClickListener(new View.OnClickListener() {
@@ -82,11 +88,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     @Override
     public void onClick(View v) {
-        Log.d(TAG, "onClick: " + ((TextView)v).getText());
+        String keyValue = ((TextView)v).getText().toString();
+        Log.d(TAG, "onClick: " + keyValue);
 
         // handle number button click
         if (v.getTag() != null && "number_button".equals(v.getTag())) {
-            mAmountField.append(((TextView)v).getText());
+            if(mAmountField.getText().toString().equals("0")) {
+                mAmountField.setText(keyValue);
+            } else {
+                mAmountField.append(keyValue);
+            }
+            if(mCurrentEditItem != null) {
+                mCurrentEditItem.setText(mAmountField.getText());
+            }
             return;
         }
 
@@ -97,20 +111,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if(!amount.isEmpty()) {
                     amountTotal += Integer.parseInt(amount);
-                    tvTotal.setText(String.format("%d", amountTotal));
+                    tvTotal.setText(getFormattedNumber(amountTotal));
 
                     itemList.add(amount);
                     listItemRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
                     //adapter.notifyDataSetChanged();
 
-                    mAmountField.setText(null);
+                    mAmountField.setText("0");
                 }
                 break;
             }
 
 
             case R.id.idKeypadKeyClear: {
-                mAmountField.setText(null);
+                mAmountField.setText("0");
                 break;
             }
 
@@ -121,9 +135,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (charCount > 0) {
                     editable.delete(charCount - 1, charCount);
                 }
+                if(mAmountField.getText().toString().isEmpty()) {
+                    mAmountField.setText("0");
+                }
                 break;
             }
         }
+    }
+
+    String getFormattedNumber(int number) {
+        //String.format("%d", amountTotal)
+        DecimalFormat formatter = new DecimalFormat("##,##,###");
+        String formatString = formatter.format(number);
+        return formatString;
     }
 
     @Override
@@ -137,8 +161,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void setKeyboardEnabled(Boolean status) {
-        LinearLayout layout = findViewById(R.id.idLayoutAmount);
-        layout.setEnabled(false);
+    public void setKeyboardEnabled(EditText editText, Boolean status) {
+        if(status) {
+            mCurrentEditItem = editText;
+            tvAdd.setEnabled(false);
+        } else {
+            mCurrentEditItem = null;
+            mAmountField.setText("0");
+            tvAdd.setEnabled(false);
+        }
+
+        /*LinearLayout layout = findViewById(R.id.idLayoutAmount);
+        layout.setEnabled(false);*/
     }
 }

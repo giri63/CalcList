@@ -45,10 +45,15 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         String item = mData.get(position);
         holder.etItem.setText(item);
+        holder.etItem.setShowSoftInputOnFocus(false);
         //holder.etItem.setInputType(0);
         holder.tvSN.setText(String.format("%d", position + 1));
         holder.btOK.setVisibility(View.GONE);
         holder.btCancel.setVisibility(View.GONE);
+
+
+
+
     }
 
     // total number of rows
@@ -86,7 +91,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
                         oldAmount = ((EditText)v).getText().toString();
                         btOK.setVisibility(View.VISIBLE);
                         btCancel.setVisibility(View.VISIBLE);
-                        mAdapterCb.setKeyboardEnabled(false);
+                        mAdapterCb.setKeyboardEnabled(etItem, true);
 
                     } else {
                         if(oldAmount != null) {
@@ -94,7 +99,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
                         }
                         btOK.setVisibility(View.GONE);
                         btCancel.setVisibility(View.GONE);
-                        mAdapterCb.setKeyboardEnabled(true);
+                        mAdapterCb.setKeyboardEnabled(etItem, false);
                     }
 
                     btOK.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +157,9 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
     // parent activity will implement this method to respond to click events
     public interface AdpaterCallback {
         public void onValueUpdated(View view, String oldValue, String newValue);
-        public void setKeyboardEnabled(Boolean status);
+        public void setKeyboardEnabled(EditText editText, Boolean status);
+
+
         //void onItemClick(View view, int position);
     }
 }

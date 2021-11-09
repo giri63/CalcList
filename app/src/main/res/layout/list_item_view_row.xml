@@ -18,7 +18,7 @@
         android:layout_width="100dp"
         android:background="@null"
         android:layout_height="wrap_content"
-        android:inputType="number"
+        android:inputType="none"
         android:selectAllOnFocus="true"
         android:text="0"/>
 
