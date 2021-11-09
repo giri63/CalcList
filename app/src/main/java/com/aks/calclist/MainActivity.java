@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView tvTotal;
     TextView tvAdd;
     Button btClearList;
+    LinearLayoutManager linearLayoutManager;
 
     TextView mCurrentEditItem = null;
 
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listItemRecyclerView.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL));
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
         listItemRecyclerView.setLayoutManager(linearLayoutManager);
 
@@ -77,8 +78,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 itemList.clear();
+                                adapter.clear();
                                 adapter.notifyDataSetChanged();
                                 amountTotal = 0;
+                                mAmountField.setText("0");
                                 tvTotal.setText(String.format("%d", amountTotal));
                                 tvAdd.setEnabled(true);
                             }})
@@ -174,12 +177,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mCurrentEditItem = editText;
             mAmountField.setText(mCurrentEditItem.getText().toString());
             tvAdd.setEnabled(false);
-            listItemRecyclerView.scrollToPosition(position);
+            //listItemRecyclerView.scrollToPosition(position);
+            //listItemRecyclerView.smoothScrollToPosition(position);
+            linearLayoutManager.scrollToPositionWithOffset(position, 0);
+
         } else {
             mCurrentEditItem = null;
             mAmountField.setText("0");
             tvAdd.setEnabled(true);
-            listItemRecyclerView.scrollToPosition(position);
         }
 
         /*LinearLayout layout = findViewById(R.id.idLayoutAmount);

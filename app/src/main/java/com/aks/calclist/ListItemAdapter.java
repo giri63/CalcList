@@ -36,6 +36,11 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
         mContext = context;
     }
 
+    void clear() {
+        hasEditFocus = false;
+    }
+
+
     // inflates the row layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
