@@ -16,6 +16,7 @@
     <TextView
         android:id="@+id/idItemAmount"
         android:layout_width="70dp"
+        android:gravity="right"
         android:layout_height="wrap_content"
         android:textSize="20dp"
         android:text=""/>

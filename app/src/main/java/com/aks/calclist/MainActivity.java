@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
 
     ListItemAdapter adapter = null;
-    private EditText mAmountField;
+    private TextView mAmountField;
     ArrayList<String> itemList = new ArrayList<>();
     RecyclerView listItemRecyclerView = null;
     Integer amountTotal = 0;
@@ -137,14 +138,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.idKeypadKeyBack: {
                 // delete one character
-                Editable editable = mAmountField.getText();
-                int charCount = editable.length();
-                if (charCount > 0) {
-                    editable.delete(charCount - 1, charCount);
+                String text = mAmountField.getText().toString();
+
+                if(text.isEmpty()) {
+                    return;
                 }
-                if(mAmountField.getText().toString().isEmpty()) {
-                    mAmountField.setText("0");
+
+                String sub = text.substring(0, text.length() - 1);
+                if(sub.isEmpty()) {
+                    sub = "0";
                 }
+                mAmountField.setText(sub);
+
                 if(mCurrentEditItem != null) {
                     mCurrentEditItem.setText(mAmountField.getText());
                 }
