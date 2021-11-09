@@ -35,7 +35,7 @@
                 android:id="@+id/idListTotal"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="20dp"
                 android:textStyle="bold"
                 android:text="0" />
 
@@ -64,7 +64,6 @@
                 android:textSize="30dp"
                 android:enabled="false"
                 android:textStyle="bold"
-                android:ems="10"
                 android:inputType="number"
                 android:text="" />
         </LinearLayout>
