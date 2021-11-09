@@ -36,6 +36,7 @@
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
+                android:textColor="@android:color/holo_green_dark"
                 android:textStyle="bold"
                 android:text="0" />
 

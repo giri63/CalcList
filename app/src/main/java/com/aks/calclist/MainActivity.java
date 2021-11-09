@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView tvAdd;
     Button btClearList;
 
-    EditText mCurrentEditItem = null;
+    TextView mCurrentEditItem = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 adapter.notifyDataSetChanged();
                                 amountTotal = 0;
                                 tvTotal.setText(String.format("%d", amountTotal));
+                                tvAdd.setEnabled(true);
                             }})
                         .setNegativeButton(android.R.string.no, null).show();
             }
@@ -107,9 +108,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.idKeypadKeyAdd: {
                 String amount = mAmountField.getText().toString();
-                Log.d(TAG, "onClick idKeypadKeyAdd" + amount);
+                Log.d(TAG, "onClick idKeypadKeyAdd:" + amount);
 
-                if(!amount.isEmpty()) {
+                if(!amount.isEmpty() && !amount.equals("0")) {
                     amountTotal += Integer.parseInt(amount);
                     tvTotal.setText(getFormattedNumber(amountTotal));
 
@@ -125,6 +126,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.idKeypadKeyClear: {
                 mAmountField.setText("0");
+                if(mCurrentEditItem != null) {
+                    mCurrentEditItem.setText(mAmountField.getText());
+                }
                 break;
             }
 
@@ -137,6 +141,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 if(mAmountField.getText().toString().isEmpty()) {
                     mAmountField.setText("0");
+                }
+                if(mCurrentEditItem != null) {
+                    mCurrentEditItem.setText(mAmountField.getText());
                 }
                 break;
             }
@@ -161,14 +168,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void setKeyboardEnabled(EditText editText, Boolean status) {
+    public void setKeyboardEnabled(int position, TextView editText, Boolean status) {
+        Log.d(TAG, "setKeyboardEnabled: position:" + position);
         if(status) {
             mCurrentEditItem = editText;
+            mAmountField.setText(mCurrentEditItem.getText().toString());
             tvAdd.setEnabled(false);
+            listItemRecyclerView.scrollToPosition(position);
         } else {
             mCurrentEditItem = null;
             mAmountField.setText("0");
-            tvAdd.setEnabled(false);
+            tvAdd.setEnabled(true);
+            listItemRecyclerView.scrollToPosition(position);
         }
 
         /*LinearLayout layout = findViewById(R.id.idLayoutAmount);

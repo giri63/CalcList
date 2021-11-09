@@ -8,19 +8,17 @@
 
     <TextView
         android:id="@+id/idItemSN"
-        android:layout_width="40dp"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:textSize="20dp"
         android:text="" />
 
-    <EditText
+    <TextView
         android:id="@+id/idItemAmount"
-        android:layout_width="100dp"
-        android:background="@null"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
-        android:inputType="none"
-        android:selectAllOnFocus="true"
-        android:text="0"/>
+        android:textSize="20dp"
+        android:text=""/>
 
     <Button
         android:id="@+id/idEditButtonOK"
