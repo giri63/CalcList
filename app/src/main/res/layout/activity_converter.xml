@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_edit_text"
+        style="@style/layout_border"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/idKGW1"
+                style="@style/text_kg"/>
+
+            <TextView
+                style="@style/text_KgLabel"
+                android:text="KG" />
+
+            <EditText
+                android:id="@+id/idKGV1"
+                style="@style/text_kg"/>
+
+            <TextView
+                style="@style/text_KgLabel"
+                android:text="Rs"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/idKGW2"
+                style="@style/text_kg" />
+            <TextView
+                style="@style/text_KgLabel"
+
+                android:text="KG"
+
+                />
+
+            <EditText
+                android:id="@+id/idKGV2"
+                style="@style/text_kg" />
+
+            <TextView
+                style="@style/text_KgLabel"
+
+                android:text="Rs"
+
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_edit_text"
+        style="@style/layout_border"
+        android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/idMGW1"
+            style="@style/text_gram"/>
+
+        <TextView
+            style="@style/text_KgLabel"
+
+            android:text="Gram"
+
+            />
+
+
+        <EditText
+            android:id="@+id/idMGV1"
+            style="@style/text_kg"/>
+
+        <TextView
+            style="@style/text_KgLabel"
+
+            android:text="Rs"
+
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/idMGW2"
+            style="@style/text_gram" />
+
+        <TextView
+            style="@style/text_KgLabel"
+            android:text="Gram"
+            />
+
+        <EditText
+            android:id="@+id/idMGV2"
+            style="@style/text_kg" />
+
+        <TextView
+            style="@style/text_KgLabel"
+
+            android:text="Rs"
+
+            />
+    </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_edit_text"
+        style="@style/layout_border"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GST"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Amount"
+            android:textSize="20dp"
+            />
+
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Tax(%)"
+            android:textSize="20dp"
+            />
+
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Total"
+            android:textSize="20dp"
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/idGSTAmount"
+            style="@style/text_kg"/>
+
+        <EditText
+            android:id="@+id/idGSTTax"
+            style="@style/text_kg"/>
+
+        <EditText
+            android:id="@+id/idGSTTotal"
+            style="@style/text_kg"/>
+    </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

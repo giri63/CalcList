@@ -13,6 +13,8 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/idItemList"
+            style="@style/layout_border"
+            android:background="@drawable/layout_border"
             android:layout_width="match_parent"
             android:layout_height="230dp">
 
@@ -20,6 +22,8 @@
 
         <LinearLayout
             android:id="@+id/idLayoutTotal"
+            style="@style/layout_border"
+            android:background="@drawable/layout_border"
             android:layout_width="match_parent"
             android:layout_below="@id/idItemList"
             android:layout_height="wrap_content">
@@ -41,14 +45,6 @@
                 android:textStyle="bold"
                 android:text="0" />
 
-            <Button
-                android:id="@+id/idButtonClearList"
-                android:layout_marginLeft="5dp"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:text="ClearList" />
-
-
         </LinearLayout>
 
         <LinearLayout
@@ -63,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textSize="30dp"
+                android:textSize="40dp"
                 android:maxLength="6"
                 android:textStyle="bold"
                 android:text="0" />

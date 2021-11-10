@@ -7,14 +7,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
@@ -30,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Integer amountTotal = 0;
     TextView tvTotal;
     TextView tvAdd;
-    Button btClearList;
+
     LinearLayoutManager linearLayoutManager;
 
     TextView mCurrentEditItem = null;
@@ -61,19 +60,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void initViews() {
-        mAmountField = findViewById(R.id.idEnterAmount);
-        tvTotal = findViewById(R.id.idListTotal);
-        tvAdd = findViewById(R.id.idKeypadKeyAdd);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.layout.menu_main_activity, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.idConverter:
+                Intent intent = new Intent(this, ConverterActivity.class);
+                startActivity(intent);
+                Log.d(TAG, "onOptionsItemSelected: action_name");
+                break;
 
-        btClearList = findViewById(R.id.idButtonClearList);
-        btClearList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            case R.id.idListClear:
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle("Item List")
-                        .setMessage("Clear List?")
+                        .setMessage("Clear Items?")
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
@@ -87,9 +93,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 tvAdd.setEnabled(true);
                             }})
                         .setNegativeButton(android.R.string.no, null).show();
-            }
-        });
+                Log.d(TAG, "onOptionsItemSelected: action_name");
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
+    private void initViews() {
+        mAmountField = findViewById(R.id.idEnterAmount);
+        tvTotal = findViewById(R.id.idListTotal);
+        tvAdd = findViewById(R.id.idKeypadKeyAdd);
     }
     @Override
     public void onClick(View v) {

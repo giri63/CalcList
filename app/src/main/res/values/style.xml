@@ -30,6 +30,57 @@
         <item name="android:tag">number_button</item>
     </style>
 
+    <style name="text_base">
+        <!--<item name="android:text">0</item>-->
+        <item name="android:selectAllOnFocus">true</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:layout_marginLeft">1dp</item>
+        <item name="android:layout_marginRight">1dp</item>
+        <item name="android:layout_marginTop">1dp</item>
+        <item name="android:layout_marginBottom">1dp</item>
 
+        <item name="android:background">@drawable/shape_edit_text</item>
+    </style>
+
+    <style name="text_kg" parent="@style/text_base">
+        <item name="android:inputType">numberDecimal</item>
+        <item name="android:maxLength">6</item>
+        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_height">40dp</item>
+    </style>
+
+    <style name="text_gram" parent="@style/text_base">
+        <item name="android:inputType">number</item>
+        <item name="android:maxLength">4</item>
+        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_height">40dp</item>
+
+    </style>
+
+    <style name="text_KgLabel">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+
+    <style name="Et1">
+        <item name="android:layout_width">130dp</item>
+    </style>
+
+    <style name="layout_border">
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginRight">2dp</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">2dp</item>
+
+    </style>
 
 </resources>
