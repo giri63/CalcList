@@ -23,8 +23,9 @@
         <item name="android:clickable">true</item>
         <item name="android:gravity">center</item>
         <item name="android:scaleType">centerInside</item>
+        <item name="android:textSize">35dp</item>
         <!--<item name="android:background">@drawable/btn_blue_bg</item>-->
-        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+
     </style>
 
     <style name="keyboard_number_button" parent="keyboard_button">
@@ -34,7 +35,7 @@
     <style name="text_base">
         <!--<item name="android:text">0</item>-->
         <item name="android:selectAllOnFocus">true</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">25dp</item>
         <item name="android:paddingLeft">5dp</item>
         <item name="android:layout_marginLeft">1dp</item>
         <item name="android:layout_marginRight">1dp</item>

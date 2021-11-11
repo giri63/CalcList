@@ -189,8 +189,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void setKeyboardEnabled(int position, TextView editText, Boolean status) {
-        Log.d(TAG, "setKeyboardEnabled: position:" + position);
+    public void setEntrySelected(int position, TextView editText, Boolean status) {
+        Log.d(TAG, "setEntrySelected: position:" + position);
         if(status) {
             mCurrentEditItem = editText;
             mAmountField.setText(mCurrentEditItem.getText().toString());
@@ -208,5 +208,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         /*LinearLayout layout = findViewById(R.id.idLayoutAmount);
         layout.setEnabled(false);*/
+    }
+
+    public void setEntryDeleted(int position, String oldValue) {
+        Log.d(TAG, "setEntryDeleted: " + position);
+
+        amountTotal = amountTotal - Integer.parseInt(oldValue);
+        tvTotal.setText(String.format("%d", amountTotal));
+
+        mCurrentEditItem = null;
+        mAmountField.setText("0");
+        tvAdd.setEnabled(true);
+
+        itemList.remove(position);
+        adapter.notifyDataSetChanged();
+        linearLayoutManager.scrollToPositionWithOffset(position, 0);
     }
 }

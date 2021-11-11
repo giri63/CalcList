@@ -1,18 +1,15 @@
 package com.aks.calclist;
 
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -58,6 +55,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
         holder.tvSN.setText(String.format("%d", position + 1));
         holder.btOK.setVisibility(View.GONE);
         holder.btCancel.setVisibility(View.GONE);
+        holder.btDelete.setVisibility(View.GONE);
 
         holder.position = position;
     }
@@ -76,6 +74,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
         TextView tvSN;
         Button btOK;
         Button btCancel;
+        Button btDelete;
         String oldAmount, newAmount;
         int position;
 
@@ -85,6 +84,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
             tvSN = itemView.findViewById(R.id.idItemSN);
             btOK = itemView.findViewById(R.id.idEditButtonOK);
             btCancel = itemView.findViewById(R.id.idEditButtonCancel);
+            btDelete = itemView.findViewById(R.id.idEditButtonDelete);
 
             //itemView.setOnClickListener(this);
 
@@ -101,10 +101,11 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
                     oldAmount = ((TextView)v).getText().toString();
                     btOK.setVisibility(View.VISIBLE);
                     btCancel.setVisibility(View.VISIBLE);
+                    btDelete.setVisibility(View.VISIBLE);
 
                     defaultTextColor = etItem.getCurrentTextColor();
                     etItem.setTextColor(Color.parseColor("#ff0000")); //red
-                    mAdapterCb.setKeyboardEnabled(position, etItem, true);
+                    mAdapterCb.setEntrySelected(position, etItem, true);
                 }
             });
 
@@ -118,9 +119,10 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
 
                     btOK.setVisibility(View.GONE);
                     btCancel.setVisibility(View.GONE);
+                    btDelete.setVisibility(View.GONE);
                     oldAmount = null;
                     hasEditFocus = false;
-                    mAdapterCb.setKeyboardEnabled(position, etItem, false);
+                    mAdapterCb.setEntrySelected(position, etItem, false);
                     etItem.setTextColor(defaultTextColor);
                 }
             });
@@ -131,13 +133,34 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
                     Log.d(TAG, "onClick: btCancel");
                     btOK.setVisibility(View.GONE);
                     btCancel.setVisibility(View.GONE);
+                    btDelete.setVisibility(View.GONE);
                     if(oldAmount != null) {
                         etItem.setText(oldAmount);
                     }
                     oldAmount = null;
                     hasEditFocus = false;
-                    mAdapterCb.setKeyboardEnabled(position, etItem, false);
+                    mAdapterCb.setEntrySelected(position, etItem, false);
                     etItem.setTextColor(defaultTextColor);
+                }
+            });
+
+            btDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(mContext)
+                            .setTitle("Delete")
+                            .setMessage("Delete Entry?")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    etItem.setTextColor(defaultTextColor);
+                                    mAdapterCb.setEntryDeleted(position, oldAmount);
+                                    btOK.setVisibility(View.GONE);
+                                    btCancel.setVisibility(View.GONE);
+                                    btDelete.setVisibility(View.GONE);
+                                    hasEditFocus = false;
+                                }})
+                            .setNegativeButton(android.R.string.no, null).show();
                 }
             });
 
@@ -152,7 +175,8 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
                         oldAmount = ((TextView)v).getText().toString();
                         btOK.setVisibility(View.VISIBLE);
                         btCancel.setVisibility(View.VISIBLE);
-                        mAdapterCb.setKeyboardEnabled(position, etItem, true);
+                        btDelete.setVisibility(View.VISIBLE);
+                        mAdapterCb.setEntrySelected(position, etItem, true);
 
                     } else {
                         if(oldAmount != null) {
@@ -160,7 +184,8 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
                         }
                         btOK.setVisibility(View.GONE);
                         btCancel.setVisibility(View.GONE);
-                        mAdapterCb.setKeyboardEnabled(position, etItem, false);
+                        btDelete.setVisibility(View.GONE);
+                        mAdapterCb.setEntrySelected(position, etItem, false);
                     }
 
 
@@ -186,8 +211,8 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
     // parent activity will implement this method to respond to click events
     public interface AdpaterCallback {
         public void onValueUpdated(View view, String oldValue, String newValue);
-        public void setKeyboardEnabled(int position, TextView editText, Boolean status);
-
+        public void setEntrySelected(int position, TextView editText, Boolean status);
+        public void setEntryDeleted(int position, String oldValue);
 
         //void onItemClick(View view, int position);
     }
