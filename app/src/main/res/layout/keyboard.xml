@@ -17,29 +17,29 @@
         android:showDividers="middle" >
 
         <TextView
-            android:id="@+id/idKeypadKey1"
+            android:id="@+id/idKeypadKey7"
             style="@style/keyboard_number_button"
-            android:text="@string/number_one"
+            android:text="@string/number_seven"
             android:textIsSelectable="false" />
 
         <TextView
-            android:id="@+id/idKeypadKey2"
+            android:id="@+id/idKeypadKey8"
             style="@style/keyboard_number_button"
-            android:text="@string/number_two"
+            android:text="@string/number_eight"
             android:textIsSelectable="false" />
 
         <TextView
-            android:id="@+id/idKeypadKey3"
+            android:id="@+id/idKeypadKey9"
             style="@style/keyboard_number_button"
-            android:text="@string/number_three"
+            android:text="@string/number_nine"
             android:textIsSelectable="false" />
+
 
         <TextView
             android:id="@+id/idKeypadKeyAdd"
             style="@style/keyboard_button"
             android:text="@string/number_add"
             android:textIsSelectable="false" />
-
     </TableRow>
 
     <TableRow
@@ -69,12 +69,11 @@
 
         <TextView
             android:id="@+id/idKeypadKeySpace3"
-            style="@style/keyboard_number_button"
+            style="@style/keyboard_button"
             android:text="@string/number_empty"
             android:textIsSelectable="false" />
-
-
     </TableRow>
+
 
     <TableRow
         android:layout_width="fill_parent"
@@ -84,31 +83,29 @@
         android:showDividers="middle" >
 
         <TextView
-            android:id="@+id/idKeypadKey7"
+            android:id="@+id/idKeypadKey1"
             style="@style/keyboard_number_button"
-            android:text="@string/number_seven"
+            android:text="@string/number_one"
             android:textIsSelectable="false" />
 
         <TextView
-            android:id="@+id/idKeypadKey8"
+            android:id="@+id/idKeypadKey2"
             style="@style/keyboard_number_button"
-            android:text="@string/number_eight"
+            android:text="@string/number_two"
             android:textIsSelectable="false" />
 
         <TextView
-            android:id="@+id/idKeypadKey9"
+            android:id="@+id/idKeypadKey3"
             style="@style/keyboard_number_button"
-            android:text="@string/number_nine"
+            android:text="@string/number_three"
             android:textIsSelectable="false" />
+
 
         <TextView
             android:id="@+id/idKeypadKeyBack"
             style="@style/keyboard_button"
             android:text="@string/number_back"
             android:textIsSelectable="false" />
-
-
-
     </TableRow>
 
     <TableRow
@@ -120,7 +117,8 @@
 
         <TextView
             android:id="@+id/idKeypadKeySpace1"
-            style="@style/keyboard_number_button"
+            style="@style/keyboard_button"
+            android:clickable="false"
             android:text="@string/number_empty"
             android:textIsSelectable="false" />
 
@@ -133,7 +131,8 @@
 
         <TextView
             android:id="@+id/idKeypadKeySpace2"
-            style="@style/keyboard_number_button"
+            style="@style/keyboard_button"
+            android:clickable="false"
             android:text="@string/number_empty"
             android:textIsSelectable="false" />
 

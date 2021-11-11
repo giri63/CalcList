@@ -203,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mCurrentEditItem = null;
             mAmountField.setText("0");
             tvAdd.setEnabled(true);
+            linearLayoutManager.scrollToPositionWithOffset(position, 0);
         }
 
         /*LinearLayout layout = findViewById(R.id.idLayoutAmount);
