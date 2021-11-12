@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView tvTotal;
     TextView tvAdd;
     TextView tvListDate;
+    DBListItem dbListItem = null;
+    Boolean dbListRead = false;
 
     LinearLayoutManager linearLayoutManager;
 
@@ -44,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         initViews();
         setDate();
+
+        dbListItem = new DBListItem(this);
 
         // set up the RecyclerView
         listItemRecyclerView = findViewById(R.id.idItemList);
@@ -61,7 +65,62 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         adapter = new ListItemAdapter(this, itemList, this);
         //adapter.setClickListener(this);
         listItemRecyclerView.setAdapter(adapter);
+        loadListFromDB();
+    }
 
+    void loadListFromDB() {
+        Log.d(TAG, "loadListFromDB: ");
+        ListItemEntry item = dbListItem.getItem("1");
+        if(item == null || item.getListCount() == 0) {
+            Log.d(TAG, "loadListFromDB: no entry in DB");
+            return;
+        }
+        dbListRead = true;
+
+        itemList.clear();
+        adapter.clear();
+        itemList.addAll(item.getListItems());
+        adapter.notifyDataSetChanged();
+
+        amountTotal = item.getListAmount();
+        tvTotal.setText(String.format("%d", amountTotal));
+
+        setDate();
+        mAmountField.setText("0");
+        tvAdd.setEnabled(true);
+    }
+
+    void clearListFromDB() {
+        Log.d(TAG, "clearListFromDB dbListRead:" + dbListRead);
+        if(dbListRead) {
+            dbListItem.deleteListEntry("1");
+            dbListRead = false;
+        }
+    }
+
+    void saveListToDB() {
+        Log.d(TAG, "saveListToDB dbListRead:" + dbListRead
+                + "itemList.size:" + itemList.size());
+
+        if(itemList.size() == 0) {
+            return;
+        }
+
+        ListItemEntry item = new ListItemEntry();
+
+        item.setListID("1");
+        item.setListName("List1");
+
+        item.setListCount(itemList.size());
+        item.setListAmount(amountTotal);
+        item.setListTime(tvListDate.getText().toString());
+        item.setListItems(itemList);
+
+        if(dbListRead) {
+            dbListItem.updateItem(item);
+        } else {
+            dbListItem.addItem(item);
+        }
 
     }
 
@@ -107,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAmountField.setText("0");
         tvTotal.setText(String.format("%d", amountTotal));
         tvAdd.setEnabled(true);
+        clearListFromDB();
     }
 
     private void initViews() {
@@ -119,6 +179,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     void setDate() {
         String currentDate = new SimpleDateFormat("dd-MMM-yyyy HH:mm", Locale.getDefault()).format(new Date());
         tvListDate.setText(currentDate);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveListToDB();
     }
 
     @Override
