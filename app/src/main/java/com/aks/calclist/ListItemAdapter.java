@@ -58,6 +58,8 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
         holder.btDelete.setVisibility(View.GONE);
 
         holder.position = position;
+
+        //Log.d(TAG, "onBindViewHolder: item:" + item + " position:" + position);
     }
 
     // total number of rows
@@ -114,7 +116,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
                 public void onClick(View v) {
                     newAmount = etItem.getText().toString();
                     if(!newAmount.equals(oldAmount)) {
-                        mAdapterCb.onValueUpdated(v, oldAmount, newAmount);
+                        mAdapterCb.onValueUpdated(position, oldAmount, newAmount);
                     }
 
                     btOK.setVisibility(View.GONE);
@@ -210,7 +212,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
 
     // parent activity will implement this method to respond to click events
     public interface AdpaterCallback {
-        public void onValueUpdated(View view, String oldValue, String newValue);
+        public void onValueUpdated(int position, String oldValue, String newValue);
         public void setEntrySelected(int position, TextView editText, Boolean status);
         public void setEntryDeleted(int position, String oldValue);
 

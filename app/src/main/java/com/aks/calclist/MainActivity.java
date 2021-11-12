@@ -179,13 +179,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onValueUpdated(View view, String oldValue, String newValue) {
-        Log.d(TAG, "onValueUpdated: view:" + view
+    public void onValueUpdated(int position, String oldValue, String newValue) {
+        Log.d(TAG, "onValueUpdated: position:" + position
                 + "oldValue" + oldValue
                 + "newValue" + newValue);
 
         amountTotal = amountTotal - Integer.parseInt(oldValue) + Integer.parseInt(newValue);
         tvTotal.setText(String.format("%d", amountTotal));
+        itemList.set(position, newValue);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -195,8 +197,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mCurrentEditItem = editText;
             mAmountField.setText(mCurrentEditItem.getText().toString());
             tvAdd.setEnabled(false);
-            //listItemRecyclerView.scrollToPosition(position);
-            //listItemRecyclerView.smoothScrollToPosition(position);
             linearLayoutManager.scrollToPositionWithOffset(position, 0);
 
         } else {
@@ -205,9 +205,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             tvAdd.setEnabled(true);
             linearLayoutManager.scrollToPositionWithOffset(position, 0);
         }
-
-        /*LinearLayout layout = findViewById(R.id.idLayoutAmount);
-        layout.setEnabled(false);*/
     }
 
     public void setEntryDeleted(int position, String oldValue) {
