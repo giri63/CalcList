@@ -17,7 +17,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, ListItemAdapter.AdpaterCallback {
     private static final String TAG = "MainActivity";
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Integer amountTotal = 0;
     TextView tvTotal;
     TextView tvAdd;
+    TextView tvListDate;
 
     LinearLayoutManager linearLayoutManager;
 
@@ -39,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
+        setDate();
 
         // set up the RecyclerView
         listItemRecyclerView = findViewById(R.id.idItemList);
@@ -84,13 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                itemList.clear();
-                                adapter.clear();
-                                adapter.notifyDataSetChanged();
-                                amountTotal = 0;
-                                mAmountField.setText("0");
-                                tvTotal.setText(String.format("%d", amountTotal));
-                                tvAdd.setEnabled(true);
+                                setListClear();
                             }})
                         .setNegativeButton(android.R.string.no, null).show();
                 Log.d(TAG, "onOptionsItemSelected: action_name");
@@ -99,11 +98,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
+    private void setListClear() {
+        itemList.clear();
+        adapter.clear();
+        adapter.notifyDataSetChanged();
+        amountTotal = 0;
+        setDate();
+        mAmountField.setText("0");
+        tvTotal.setText(String.format("%d", amountTotal));
+        tvAdd.setEnabled(true);
+    }
+
     private void initViews() {
         mAmountField = findViewById(R.id.idEnterAmount);
         tvTotal = findViewById(R.id.idListTotal);
         tvAdd = findViewById(R.id.idKeypadKeyAdd);
+        tvListDate = findViewById(R.id.idListDate);
     }
+
+    void setDate() {
+        String currentDate = new SimpleDateFormat("dd-MMM-yyyy HH:mm", Locale.getDefault()).format(new Date());
+        tvListDate.setText(currentDate);
+    }
+
     @Override
     public void onClick(View v) {
         String keyValue = ((TextView)v).getText().toString();
@@ -128,6 +145,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d(TAG, "onClick idKeypadKeyAdd:" + amount);
 
                 if(!amount.isEmpty() && !amount.equals("0")) {
+                    if(itemList.size() == 0) {
+                        setDate();
+                    }
+
                     amountTotal += Integer.parseInt(amount);
                     tvTotal.setText(getFormattedNumber(amountTotal));
 
@@ -219,6 +240,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         itemList.remove(position);
         adapter.notifyDataSetChanged();
+
+        if((position >= 0) && position == itemList.size()) {
+            position--;
+        }
         linearLayoutManager.scrollToPositionWithOffset(position, 0);
     }
 }
