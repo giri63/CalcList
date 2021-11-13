@@ -53,12 +53,8 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
         //holder.etItem.setShowSoftInputOnFocus(false);
         //holder.etItem.setInputType(0);
         holder.tvSN.setText(String.format("%d", position + 1));
-        holder.btOK.setVisibility(View.GONE);
-        holder.btCancel.setVisibility(View.GONE);
         holder.btDelete.setVisibility(View.GONE);
-
         holder.position = position;
-
         //Log.d(TAG, "onBindViewHolder: item:" + item + " position:" + position);
     }
 
@@ -74,18 +70,32 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
         TextView etItem;
         int defaultTextColor;
         TextView tvSN;
-        Button btOK;
-        Button btCancel;
         Button btDelete;
-        String oldAmount, newAmount;
         int position;
+
+        int getCurrentPosition() {
+            return position;
+        }
+
+        void setAmountText(String amount) {
+            etItem.setText(amount);
+        }
+
+        String getAmountText() {
+            return etItem.getText().toString();
+        }
+
+        public void unselectEntry() {
+            btDelete.setVisibility(View.GONE);
+            hasEditFocus = false;
+            etItem.setTextColor(defaultTextColor);
+            mAdapterCb.setEntrySelected(this, false);
+        }
 
         ViewHolder(View itemView) {
             super(itemView);
             etItem = itemView.findViewById(R.id.idItemAmount);
             tvSN = itemView.findViewById(R.id.idItemSN);
-            btOK = itemView.findViewById(R.id.idEditButtonOK);
-            btCancel = itemView.findViewById(R.id.idEditButtonCancel);
             btDelete = itemView.findViewById(R.id.idEditButtonDelete);
 
             //itemView.setOnClickListener(this);
@@ -97,52 +107,11 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
                         Log.d(TAG, "onClick: Already one edit enabled");
                         return;
                     }
-                    
                     hasEditFocus = true;
-
-                    oldAmount = ((TextView)v).getText().toString();
-                    btOK.setVisibility(View.VISIBLE);
-                    btCancel.setVisibility(View.VISIBLE);
                     btDelete.setVisibility(View.VISIBLE);
-
                     defaultTextColor = etItem.getCurrentTextColor();
                     etItem.setTextColor(Color.parseColor("#ff0000")); //red
-                    mAdapterCb.setEntrySelected(position, etItem, true);
-                }
-            });
-
-            btOK.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    newAmount = etItem.getText().toString();
-                    if(!newAmount.equals(oldAmount)) {
-                        mAdapterCb.onValueUpdated(position, oldAmount, newAmount);
-                    }
-
-                    btOK.setVisibility(View.GONE);
-                    btCancel.setVisibility(View.GONE);
-                    btDelete.setVisibility(View.GONE);
-                    oldAmount = null;
-                    hasEditFocus = false;
-                    mAdapterCb.setEntrySelected(position, etItem, false);
-                    etItem.setTextColor(defaultTextColor);
-                }
-            });
-
-            btCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "onClick: btCancel");
-                    btOK.setVisibility(View.GONE);
-                    btCancel.setVisibility(View.GONE);
-                    btDelete.setVisibility(View.GONE);
-                    if(oldAmount != null) {
-                        etItem.setText(oldAmount);
-                    }
-                    oldAmount = null;
-                    hasEditFocus = false;
-                    mAdapterCb.setEntrySelected(position, etItem, false);
-                    etItem.setTextColor(defaultTextColor);
+                    mAdapterCb.setEntrySelected(ViewHolder.this, true);
                 }
             });
 
@@ -156,45 +125,13 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
                                     etItem.setTextColor(defaultTextColor);
-                                    mAdapterCb.setEntryDeleted(position, oldAmount);
-                                    btOK.setVisibility(View.GONE);
-                                    btCancel.setVisibility(View.GONE);
+                                    mAdapterCb.setCurrentEntryDeleted();
                                     btDelete.setVisibility(View.GONE);
                                     hasEditFocus = false;
                                 }})
                             .setNegativeButton(android.R.string.no, null).show();
                 }
             });
-
-            etItem.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-
-                    Log.d(TAG, "onFocusChange: hasFocus:"
-                            + hasFocus + "text:" + ((TextView)v).getText());
-
-                    if(hasFocus) {
-                        oldAmount = ((TextView)v).getText().toString();
-                        btOK.setVisibility(View.VISIBLE);
-                        btCancel.setVisibility(View.VISIBLE);
-                        btDelete.setVisibility(View.VISIBLE);
-                        mAdapterCb.setEntrySelected(position, etItem, true);
-
-                    } else {
-                        if(oldAmount != null) {
-                            etItem.setText(oldAmount);
-                        }
-                        btOK.setVisibility(View.GONE);
-                        btCancel.setVisibility(View.GONE);
-                        btDelete.setVisibility(View.GONE);
-                        mAdapterCb.setEntrySelected(position, etItem, false);
-                    }
-
-
-
-                }
-            });
-
         }
 
         @Override
@@ -212,9 +149,8 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHo
 
     // parent activity will implement this method to respond to click events
     public interface AdpaterCallback {
-        public void onValueUpdated(int position, String oldValue, String newValue);
-        public void setEntrySelected(int position, TextView editText, Boolean status);
-        public void setEntryDeleted(int position, String oldValue);
+        public void setEntrySelected(ViewHolder entry, Boolean status);
+        public void setCurrentEntryDeleted();
 
         //void onItemClick(View view, int position);
     }

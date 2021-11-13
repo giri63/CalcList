@@ -120,6 +120,21 @@ public class DBListItem extends SQLiteOpenHelper {
         return null;
     }
 
+    Boolean IsListIdPresent(String listId) {
+        Boolean isPresent;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_NAME, null, KEY_LIST_ID + "=?",
+                new String[] { listId }, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            isPresent = true;
+        } else {
+            isPresent = false;
+        }
+        Log.d(TAG, "IsListIdPresent listId:" + listId + ",isPresent:" + isPresent);
+        return isPresent;
+    }
+
     private ListItemEntry getListEntry(Cursor cursor) {
         initIndex(cursor);
 
@@ -155,6 +170,16 @@ public class DBListItem extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         return contactList;
+    }
+
+    public Boolean addOrUpdateItem(ListItemEntry item) {
+        Boolean status;
+        if(IsListIdPresent(item.listID)) {
+            status = updateItem(item);
+        } else {
+            status = addItem(item);
+        }
+        return status;
     }
 
     // code to update the single contact

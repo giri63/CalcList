@@ -1,5 +1,6 @@
 package com.aks.calclist;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -9,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -120,6 +122,12 @@ public class ConverterActivity extends AppCompatActivity {
                 clearKGValues();
                 clearMGValues();
                 clearGSTValues();
+
+                View view = this.getCurrentFocus();
+                if(view != null) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);

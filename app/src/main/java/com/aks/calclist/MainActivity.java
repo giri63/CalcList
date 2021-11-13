@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
@@ -29,16 +30,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView mAmountField;
     ArrayList<String> itemList = new ArrayList<>();
     RecyclerView listItemRecyclerView = null;
-    Integer amountTotal = 0;
+    int mAmountTotal = 0;
+    String mOldAmount;
     TextView tvTotal;
     TextView tvAdd;
+    TextView tvOK;
+    TextView tvCancel;
+    TextView tvSpace3;
+
     TextView tvListDate;
+
     DBListItem dbListItem = null;
     Boolean dbListRead = false;
 
     LinearLayoutManager linearLayoutManager;
 
-    TextView mCurrentEditItem = null;
+    ListItemAdapter.ViewHolder mCurrentEntry = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         itemList.addAll(item.getListItems());
         adapter.notifyDataSetChanged();
 
-        amountTotal = item.getListAmount();
-        tvTotal.setText(String.format("%d", amountTotal));
+        mAmountTotal = item.getListAmount();
+        tvTotal.setText(String.format("%d", mAmountTotal));
 
         setDate();
         mAmountField.setText("0");
@@ -112,16 +119,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         item.setListName("List1");
 
         item.setListCount(itemList.size());
-        item.setListAmount(amountTotal);
+        item.setListAmount(mAmountTotal);
         item.setListTime(tvListDate.getText().toString());
         item.setListItems(itemList);
 
-        if(dbListRead) {
-            dbListItem.updateItem(item);
-        } else {
-            dbListItem.addItem(item);
-        }
-
+        dbListItem.addOrUpdateItem(item);
     }
 
     @Override
@@ -141,6 +143,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.idListClear:
+                if(mAmountTotal == 0) {
+                    break;
+                }
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle("Item List")
                         .setMessage("Clear Items?")
@@ -161,10 +166,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         itemList.clear();
         adapter.clear();
         adapter.notifyDataSetChanged();
-        amountTotal = 0;
+        mAmountTotal = 0;
         setDate();
         mAmountField.setText("0");
-        tvTotal.setText(String.format("%d", amountTotal));
+        tvTotal.setText(String.format("%d", mAmountTotal));
         tvAdd.setEnabled(true);
         clearListFromDB();
     }
@@ -173,6 +178,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAmountField = findViewById(R.id.idEnterAmount);
         tvTotal = findViewById(R.id.idListTotal);
         tvAdd = findViewById(R.id.idKeypadKeyAdd);
+        tvOK = findViewById(R.id.idKeypadKeyOK);
+        tvCancel = findViewById(R.id.idKeypadKeyCancel);
+        tvSpace3 = findViewById(R.id.idKeypadKeySpace3);
+
         tvListDate = findViewById(R.id.idListDate);
     }
 
@@ -199,24 +208,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 mAmountField.append(keyValue);
             }
-            if(mCurrentEditItem != null) {
-                mCurrentEditItem.setText(mAmountField.getText());
-            }
             return;
         }
 
         switch (v.getId()) {
             case R.id.idKeypadKeyAdd: {
+
                 String amount = mAmountField.getText().toString();
                 Log.d(TAG, "onClick idKeypadKeyAdd:" + amount);
 
-                if(!amount.isEmpty() && !amount.equals("0")) {
-                    if(itemList.size() == 0) {
+                if (!amount.isEmpty() && !amount.equals("0")) {
+                    if (itemList.size() == 0) {
                         setDate();
                     }
 
-                    amountTotal += Integer.parseInt(amount);
-                    tvTotal.setText(getFormattedNumber(amountTotal));
+                    mAmountTotal += Integer.parseInt(amount);
+                    tvTotal.setText(getFormattedNumber(mAmountTotal));
 
                     itemList.add(amount);
                     listItemRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
@@ -227,12 +234,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
 
+            case R.id.idKeypadKeyOK: {
+                String newAmount = mAmountField.getText().toString();
+
+                if(newAmount.equals(mOldAmount)) {
+                    return;
+                }
+
+                mCurrentEntry.setAmountText(newAmount);
+
+                mAmountTotal = mAmountTotal - Integer.parseInt(mOldAmount)
+                        + Integer.parseInt(newAmount);
+
+                tvTotal.setText(String.format("%d", mAmountTotal));
+                itemList.set(mCurrentEntry.getCurrentPosition(), newAmount);
+                mCurrentEntry.unselectEntry();
+                //adapter.notifyDataSetChanged();
+                break;
+            }
+
+            case R.id.idKeypadKeyCancel: {
+                mCurrentEntry.unselectEntry();
+                break;
+            }
+
 
             case R.id.idKeypadKeyClear: {
                 mAmountField.setText("0");
-                if(mCurrentEditItem != null) {
-                    mCurrentEditItem.setText(mAmountField.getText());
-                }
                 break;
             }
 
@@ -249,60 +277,71 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     sub = "0";
                 }
                 mAmountField.setText(sub);
-
-                if(mCurrentEditItem != null) {
-                    mCurrentEditItem.setText(mAmountField.getText());
-                }
                 break;
             }
         }
     }
 
     String getFormattedNumber(int number) {
-        //String.format("%d", amountTotal)
+        //String.format("%d", mAmountTotal)
         DecimalFormat formatter = new DecimalFormat("##,##,###");
         String formatString = formatter.format(number);
         return formatString;
     }
 
-    @Override
-    public void onValueUpdated(int position, String oldValue, String newValue) {
-        Log.d(TAG, "onValueUpdated: position:" + position
-                + "oldValue" + oldValue
-                + "newValue" + newValue);
+    private void editEntryOK() {
 
-        amountTotal = amountTotal - Integer.parseInt(oldValue) + Integer.parseInt(newValue);
-        tvTotal.setText(String.format("%d", amountTotal));
-        itemList.set(position, newValue);
-        adapter.notifyDataSetChanged();
     }
 
     @Override
-    public void setEntrySelected(int position, TextView editText, Boolean status) {
-        Log.d(TAG, "setEntrySelected: position:" + position);
+    public void setEntrySelected(ListItemAdapter.ViewHolder entry, Boolean status) {
+        Log.d(TAG, "setEntrySelected: status:" + status);
         if(status) {
-            mCurrentEditItem = editText;
-            mAmountField.setText(mCurrentEditItem.getText().toString());
-            tvAdd.setEnabled(false);
-            linearLayoutManager.scrollToPositionWithOffset(position, 0);
+            mCurrentEntry = entry;
+            mOldAmount = entry.getAmountText();
+            mAmountField.setText(mOldAmount);
 
+            tvAdd.setVisibility(View.GONE);
+            tvOK.setVisibility(View.VISIBLE);
+            tvCancel.setVisibility(View.VISIBLE);
+            tvSpace3.setVisibility(View.GONE);
+
+            linearLayoutManager.scrollToPositionWithOffset(mCurrentEntry.getCurrentPosition(), 0);
         } else {
-            mCurrentEditItem = null;
             mAmountField.setText("0");
-            tvAdd.setEnabled(true);
-            linearLayoutManager.scrollToPositionWithOffset(position, 0);
+
+            tvAdd.setVisibility(View.VISIBLE);
+            tvOK.setVisibility(View.GONE);
+            tvCancel.setVisibility(View.GONE);
+            tvSpace3.setVisibility(View.VISIBLE);
+
+
+
+            linearLayoutManager.scrollToPositionWithOffset(mCurrentEntry.getCurrentPosition(), 0);
+            mCurrentEntry = null;
         }
     }
 
-    public void setEntryDeleted(int position, String oldValue) {
-        Log.d(TAG, "setEntryDeleted: " + position);
+    @Override
+    public void setCurrentEntryDeleted() {
+        Log.d(TAG, "setEntryDeleted: mCurrentEntry:" + mCurrentEntry);
 
-        amountTotal = amountTotal - Integer.parseInt(oldValue);
-        tvTotal.setText(String.format("%d", amountTotal));
+        if(mCurrentEntry == null) {
+            return;
+        }
 
-        mCurrentEditItem = null;
+        int position = mCurrentEntry.getCurrentPosition();
+
+        mAmountTotal = mAmountTotal - Integer.parseInt(mOldAmount);
+
+        tvTotal.setText(String.format("%d", mAmountTotal));
+
         mAmountField.setText("0");
-        tvAdd.setEnabled(true);
+
+        tvAdd.setVisibility(View.VISIBLE);
+        tvOK.setVisibility(View.GONE);
+        tvCancel.setVisibility(View.GONE);
+        tvSpace3.setVisibility(View.VISIBLE);
 
         itemList.remove(position);
         adapter.notifyDataSetChanged();
@@ -310,6 +349,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if((position >= 0) && position == itemList.size()) {
             position--;
         }
+        mCurrentEntry = null;
         linearLayoutManager.scrollToPositionWithOffset(position, 0);
     }
 }

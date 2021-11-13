@@ -13,11 +13,14 @@
     <string name="number_nine">9</string>
     <string name="btn_clear">Clear</string>
     <string name="btn_backspace">Back</string>
-    <string name="keyboard_clear">CLR</string>
+    <string name="keyboard_clear">Clear</string>
     <string name="app_name_for">Test</string>
     <string name="number_add">+</string>
+    <string name="number_ok">OK</string>
+    <string name="number_cancel">Cancel</string>
     <string name="number_back">Back</string>
     <string name="number_empty"></string>
+
 
 
 

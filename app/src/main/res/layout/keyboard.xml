@@ -40,6 +40,15 @@
             style="@style/keyboard_button"
             android:text="@string/number_add"
             android:textIsSelectable="false" />
+
+        <TextView
+            android:id="@+id/idKeypadKeyOK"
+            style="@style/keyboard_button"
+            android:text="@string/number_ok"
+            android:visibility="gone"
+            android:textIsSelectable="false" />
+
+
     </TableRow>
 
     <TableRow
@@ -71,6 +80,13 @@
             android:id="@+id/idKeypadKeySpace3"
             style="@style/keyboard_button"
             android:text="@string/number_empty"
+            android:textIsSelectable="false" />
+
+        <TextView
+            android:id="@+id/idKeypadKeyCancel"
+            style="@style/keyboard_button"
+            android:visibility="gone"
+            android:text="@string/number_cancel"
             android:textIsSelectable="false" />
     </TableRow>
 

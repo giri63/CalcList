@@ -23,13 +23,14 @@
         <item name="android:clickable">true</item>
         <item name="android:gravity">center</item>
         <item name="android:scaleType">centerInside</item>
-        <item name="android:textSize">35dp</item>
+        <item name="android:textSize">25dp</item>
         <!--<item name="android:background">@drawable/btn_blue_bg</item>-->
 
     </style>
 
     <style name="keyboard_number_button" parent="keyboard_button">
         <item name="android:tag">number_button</item>
+        <item name="android:textSize">35dp</item>
     </style>
 
     <style name="text_base">
