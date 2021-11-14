@@ -33,7 +33,7 @@
                 style="@style/text_kg"/>
 
             <TextView
-                style="@style/text_KgLabel"
+                style="@style/text_RsLabel"
                 android:text="Rs"
                 />
         </LinearLayout>
@@ -59,7 +59,7 @@
                 style="@style/text_kg" />
 
             <TextView
-                style="@style/text_KgLabel"
+                style="@style/text_RsLabel"
 
                 android:text="Rs"
 
@@ -100,7 +100,7 @@
             style="@style/text_kg"/>
 
         <TextView
-            style="@style/text_KgLabel"
+            style="@style/text_RsLabel"
 
             android:text="Rs"
 
@@ -127,8 +127,7 @@
             style="@style/text_kg" />
 
         <TextView
-            style="@style/text_KgLabel"
-
+            style="@style/text_RsLabel"
             android:text="Rs"
 
             />
