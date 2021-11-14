@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle("Item List")
-                        .setMessage("Clear Items?")
+                        .setMessage("Delete Item List?")
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
